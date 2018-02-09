@@ -39,7 +39,9 @@ class HomeVC: UIViewController, Alertable {
     
     var manager: CLLocationManager?
     
-    var currentUserId = FIRAuth.auth()?.currentUser?.uid
+//    var currentUserId = Auth.auth().currentUser?.uid
+    var currentUserId:String? = "currentUserID"
+
     
     var regionRadius: CLLocationDistance = 1000
     
@@ -56,7 +58,7 @@ class HomeVC: UIViewController, Alertable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        /*
         manager = CLLocationManager()
         manager?.delegate = self
         manager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -104,17 +106,20 @@ class HomeVC: UIViewController, Alertable {
                 }
             }
         }
+ */
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        /*
         if currentUserId != nil {
             DataService.instance.userIsDriver(userKey: currentUserId!, handler: { (status) in
                 if status == true {
                     self.buttonsForDriver(areHidden: true)
                 }
             })
+ 
         }
         
         DataService.instance.REF_TRIPS.observe(.childRemoved, with: { (removedTripSnapshot) in
@@ -143,7 +148,7 @@ class HomeVC: UIViewController, Alertable {
             DataService.instance.driverIsOnTrip(driverKey: self.currentUserId!, handler: { (isOnTrip, driverKey, tripKey) in
                 if isOnTrip == true {
                     DataService.instance.REF_TRIPS.observeSingleEvent(of: .value, with: { (tripSnapshot) in
-                        if let tripSnapshot = tripSnapshot.children.allObjects as? [FIRDataSnapshot] {
+                        if let tripSnapshot = tripSnapshot.children.allObjects as? [DataSnapshot] {
                             for trip in tripSnapshot {
                                 if trip.childSnapshot(forPath: DRIVER_KEY).value as? String == self.currentUserId! {
                                     let pickupCoordinatesArray = trip.childSnapshot(forPath: USER_PICKUP_COORDINATE).value as! NSArray
@@ -167,6 +172,7 @@ class HomeVC: UIViewController, Alertable {
             })
             connectUserAndDriverForTrip()
         }
+ */
     }
     
     func checkLocationAuthStatus() {
@@ -197,7 +203,7 @@ class HomeVC: UIViewController, Alertable {
     
     func loadDriverAnnotationsFromFB() {
         DataService.instance.REF_DRIVERS.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let driverSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+            if let driverSnapshot = snapshot.children.allObjects as? [DataSnapshot] {
                 for driver in driverSnapshot {
                     if driver.hasChild(COORDINATE) {
                         if driver.childSnapshot(forPath: ACCOUNT_PICKUP_MODE_ENABLED).value as? Bool == true {
@@ -319,7 +325,7 @@ class HomeVC: UIViewController, Alertable {
     
     @IBAction func centerMapBtnWasPressed(_ sender: Any) {
         DataService.instance.REF_USERS.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let userSnapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+            if let userSnapshot = snapshot.children.allObjects as? [DataSnapshot] {
                 for user in userSnapshot {
                     if user.key == self.currentUserId! {
                         if user.hasChild(TRIP_COORDINATE) {

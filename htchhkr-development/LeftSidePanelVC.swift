@@ -13,8 +13,10 @@ class LeftSidePanelVC: UIViewController {
     
     let appDelegate = AppDelegate.getAppDelegate()
     
-    let currentUserId = FIRAuth.auth()?.currentUser?.uid
+//    let currentUserId = Auth.auth().currentUser?.uid
+    let currentUserId = "currentUserID"
 
+    
     @IBOutlet weak var userEmailLbl: UILabel!
     @IBOutlet weak var userAccountTypeLbl: UILabel!
     @IBOutlet weak var userImageView: RoundImageView!
@@ -32,27 +34,28 @@ class LeftSidePanelVC: UIViewController {
         pickupModeSwitch.isOn = false
         pickupModeSwitch.isHidden = true
         pickupModeLbl.isHidden = true
-        
+        /*
         observePassengersAndDrivers()
         
-        if FIRAuth.auth()?.currentUser == nil {
+        if Auth.auth().currentUser == nil {
             userEmailLbl.text = ""
             userAccountTypeLbl.text = ""
             userImageView.isHidden = true
             loginOutBtn.setTitle(MSG_SIGN_UP_SIGN_IN, for: .normal)
         } else {
-            userEmailLbl.text = FIRAuth.auth()?.currentUser?.email
+            userEmailLbl.text = Auth.auth().currentUser?.email
             userAccountTypeLbl.text = ""
             userImageView.isHidden = false
             loginOutBtn.setTitle(MSG_SIGN_OUT, for: .normal)
         }
+ */
     }
     
     func observePassengersAndDrivers() {
         DataService.instance.REF_USERS.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+            if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshot {
-                    if snap.key == FIRAuth.auth()?.currentUser?.uid {
+                    if snap.key == Auth.auth().currentUser?.uid {
                         self.userAccountTypeLbl.text = ACCOUNT_TYPE_PASSENGER
                     }
                 }
@@ -60,9 +63,9 @@ class LeftSidePanelVC: UIViewController {
         })
         
         DataService.instance.REF_DRIVERS.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+            if let snapshot = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshot {
-                    if snap.key == FIRAuth.auth()?.currentUser?.uid {
+                    if snap.key == Auth.auth().currentUser?.uid {
                         self.userAccountTypeLbl.text = ACCOUNT_TYPE_DRIVER
                         self.pickupModeSwitch.isHidden = false
                         
@@ -76,6 +79,7 @@ class LeftSidePanelVC: UIViewController {
     }
     
     @IBAction func switchWasToggled(_ sender: Any) {
+        /*
         if pickupModeSwitch.isOn {
             pickupModeLbl.text = MSG_PICKUP_MODE_ENABLED
             appDelegate.MenuContainerVC.toggleLeftPanel()
@@ -85,16 +89,18 @@ class LeftSidePanelVC: UIViewController {
             appDelegate.MenuContainerVC.toggleLeftPanel()
             DataService.instance.REF_DRIVERS.child(currentUserId!).updateChildValues([ACCOUNT_PICKUP_MODE_ENABLED: false])
         }
+ */
     }
 
     @IBAction func signUpLoginBtnWasPressed(_ sender: Any) {
-        if FIRAuth.auth()?.currentUser == nil {
+        /*
+        if Auth.auth().currentUser == nil {
             let storyboard = UIStoryboard(name: MAIN_STORYBOARD, bundle: Bundle.main)
             let loginVC = storyboard.instantiateViewController(withIdentifier: VC_LOGIN) as? LoginVC
             present(loginVC!, animated: true, completion: nil)
         } else {
             do {
-                try FIRAuth.auth()?.signOut()
+                try Auth.auth().signOut()
                 userEmailLbl.text = ""
                 userAccountTypeLbl.text = ""
                 userImageView.isHidden = true
@@ -105,5 +111,6 @@ class LeftSidePanelVC: UIViewController {
                 print(error)
             }
         }
+ */
     }
 }

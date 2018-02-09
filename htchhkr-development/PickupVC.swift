@@ -22,7 +22,7 @@ class PickupVC: UIViewController {
     
     var locationPlacemark: MKPlacemark!
     
-    var currentUserId = FIRAuth.auth()?.currentUser?.uid
+    var currentUserId = Auth.auth().currentUser?.uid
     
     override func viewDidLoad() {
         super.viewDidLoad()

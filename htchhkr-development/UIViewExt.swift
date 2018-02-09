@@ -19,7 +19,7 @@ extension UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
-    func keyboardWillChange(_ notification: NSNotification) {
+    @objc func keyboardWillChange(_ notification: NSNotification) {
         let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Double
         let curve = notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! UInt
         let curFrame = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
